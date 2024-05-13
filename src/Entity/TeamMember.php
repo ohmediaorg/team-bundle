@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use OHMedia\FileBundle\Entity\File;
 use OHMedia\SecurityBundle\Entity\Traits\BlameableTrait;
 use OHMedia\TeamBundle\Repository\TeamMemberRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TeamMemberRepository::class)]
 class TeamMember
@@ -26,36 +27,49 @@ class TeamMember
     private ?Team $team = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50)]
     private ?string $honorific = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     private ?string $first_name = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     private ?string $last_name = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50)]
     private ?string $designation = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50)]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $email = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50)]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $facebook = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $twitter = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $instagram = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $linked_in = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]

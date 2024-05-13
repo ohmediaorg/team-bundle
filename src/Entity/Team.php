@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use OHMedia\SecurityBundle\Entity\Traits\BlameableTrait;
 use OHMedia\TeamBundle\Repository\TeamRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -19,6 +20,8 @@ class Team
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $name = null;
 
     /**
