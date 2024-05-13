@@ -22,10 +22,11 @@ Run `php bin/console make:migration` then run the subsequent migration.
 
 # Frontend
 
-The bundle includes templates that output the Teams/FAQs using Bootstrap's
-Team component.
+Create `templates/bundles/OHMediaTeamBundle/team.html.twig` which will have access
+to a `team` variable. The members can be looped on:
 
-If custom output is needed, override the following templates:
-
-1. `templates/bundles/OHMediaTeamBundle/team.html.twig`
-1. `templates/bundles/OHMediaTeamBundle/faq.html.twig`
+```twig
+{% for member in team.members %}
+{{ dump(member) }}
+{% endfor %}
+```
