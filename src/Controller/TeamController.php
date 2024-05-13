@@ -45,8 +45,8 @@ class TeamController extends AbstractController
             'You cannot access the list of teams.'
         );
 
-        $qb = $this->teamRepository->createQueryBuilder('a');
-        $qb->orderBy('a.name', 'asc');
+        $qb = $this->teamRepository->createQueryBuilder('t');
+        $qb->orderBy('t.name', 'asc');
 
         return $this->render('@OHMediaTeam/team/team_index.html.twig', [
             'pagination' => $this->paginator->paginate($qb, 20),

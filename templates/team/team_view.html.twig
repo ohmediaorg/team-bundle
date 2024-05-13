@@ -51,7 +51,9 @@
       <thead>
         <tr>
           <th style="width:1rem">&nbsp;</th>
-          <th>Member</th>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Socials</th>
           <th></th>
         </tr>
       </thead>
@@ -64,7 +66,40 @@
       {% for team_member in team.members %}
         <tr data-id="{{ team_member.id }}">
           <td data-handle>{{ bootstrap_icon('arrows-move') }}</td>
-          <td>{{ team_member.header }}</td>
+          <td>
+            {% if team_member.honorific %}
+            <small class="d-block text-muted">{{ team_member.honorific }}</small>
+            {% endif %}
+            {{ team_member }}
+            {% if team_member.designation %}
+            <small class="d-block text-muted">{{ team_member.designation }}</small>
+            {% endif %}
+            {% if team_member.title %}
+            <small class="d-block text-muted">{{ team_member.title }}</small>
+            {% endif %}
+          </td>
+          <td>
+            {% if team_member.email %}
+            <small class="d-block text-muted">{{ team_member.email }}</small>
+            {% endif %}
+            {% if team_member.phone %}
+            <small class="d-block text-muted">{{ team_member.phone }}</small>
+            {% endif %}
+          </td>
+          <td>
+            {% if team_member.facebook %}
+            <small class="d-block text-muted">{{ team_member.facebook }}</small>
+            {% endif %}
+            {% if team_member.twitter %}
+            <small class="d-block text-muted">{{ team_member.twitter }}</small>
+            {% endif %}
+            {% if team_member.instagram %}
+            <small class="d-block text-muted">{{ team_member.instagram }}</small>
+            {% endif %}
+            {% if team_member.linkedIn %}
+            <small class="d-block text-muted">{{ team_member.linkedIn }}</small>
+            {% endif %}
+          </td>
           <td>
             {% if is_granted(attributes.team_member.edit, team_member) %}
             <a class="btn btn-sm btn-primary btn-action" href="{{ path('team_member_edit', {id: team_member.id}) }}" title="Edit">

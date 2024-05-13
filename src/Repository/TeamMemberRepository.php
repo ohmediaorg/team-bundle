@@ -46,12 +46,12 @@ class TeamMemberRepository extends ServiceEntityRepository implements WysiwygRep
         $params = new ArrayCollection();
 
         foreach ($shortcodes as $i => $shortcode) {
-            $ors[] = 'ai.content LIKE :shortcode_'.$i;
+            $ors[] = 'tm.bio LIKE :shortcode_'.$i;
             $params[] = new Parameter('shortcode_'.$i, '%'.$shortcode.'%');
         }
 
-        return $this->createQueryBuilder('ai')
-            ->select('COUNT(ai)')
+        return $this->createQueryBuilder('tm')
+            ->select('COUNT(tm)')
             ->where(implode(' OR ', $ors))
             ->setParameters($params)
             ->getQuery()
