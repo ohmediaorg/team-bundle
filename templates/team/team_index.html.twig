@@ -15,7 +15,7 @@
 {% block actions %}
 {% if can_create_team %}
 <a href="{{ create_team_href }}" class="btn btn-sm btn-primary">
-  <i class="bi bi-plus"></i> Add Team</a>
+  {{ bootstrap_icon('plus') }} Add Team</a>
 {% endif %}
 {% endblock %}
 
