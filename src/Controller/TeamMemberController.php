@@ -18,11 +18,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Admin]
 class TeamMemberController extends AbstractController
 {
+    public function __construct(private TeamMemberRepository $teamMemberRepository)
+    {
+    }
+
     #[Route('/team/{id}/member/create', name: 'team_member_create', methods: ['GET', 'POST'])]
     public function create(
         Request $request,
         Team $team,
-        TeamMemberRepository $teamMemberRepository
     ): Response {
         $teamMember = new TeamMember();
         $teamMember->setTeam($team);
@@ -40,7 +43,7 @@ class TeamMemberController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $teamMemberRepository->save($teamMember, true);
+            $this->teamMemberRepository->save($teamMember, true);
 
             $this->addFlash('notice', 'The member was created successfully.');
 
@@ -60,7 +63,6 @@ class TeamMemberController extends AbstractController
     public function edit(
         Request $request,
         TeamMember $teamMember,
-        TeamMemberRepository $teamMemberRepository
     ): Response {
         $this->denyAccessUnlessGranted(
             TeamMemberVoter::EDIT,
@@ -77,7 +79,7 @@ class TeamMemberController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $teamMemberRepository->save($teamMember, true);
+            $this->teamMemberRepository->save($teamMember, true);
 
             $this->addFlash('notice', 'The team member was updated successfully.');
 
@@ -97,7 +99,6 @@ class TeamMemberController extends AbstractController
     public function delete(
         Request $request,
         TeamMember $teamMember,
-        TeamMemberRepository $teamMemberRepository
     ): Response {
         $this->denyAccessUnlessGranted(
             TeamMemberVoter::DELETE,
@@ -114,7 +115,7 @@ class TeamMemberController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $teamMemberRepository->remove($teamMember, true);
+            $this->teamMemberRepository->remove($teamMember, true);
 
             $this->addFlash('notice', 'The team member was deleted successfully.');
 
