@@ -72,14 +72,18 @@ class TeamController extends AbstractController
 
         $form->handleRequest($this->requestStack->getCurrentRequest());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->teamRepository->save($team, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->teamRepository->save($team, true);
 
-            $this->addFlash('notice', 'The team was created successfully.');
+                $this->addFlash('notice', 'The team was created successfully.');
 
-            return $this->redirectToRoute('team_view', [
-                'id' => $team->getId(),
-            ]);
+                return $this->redirectToRoute('team_view', [
+                    'id' => $team->getId(),
+                ]);
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaTeam/team/team_create.html.twig', [
@@ -165,14 +169,18 @@ class TeamController extends AbstractController
 
         $form->handleRequest($this->requestStack->getCurrentRequest());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->teamRepository->save($team, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->teamRepository->save($team, true);
 
-            $this->addFlash('notice', 'The team was updated successfully.');
+                $this->addFlash('notice', 'The team was updated successfully.');
 
-            return $this->redirectToRoute('team_view', [
-                'id' => $team->getId(),
-            ]);
+                return $this->redirectToRoute('team_view', [
+                    'id' => $team->getId(),
+                ]);
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaTeam/team/team_edit.html.twig', [
@@ -196,12 +204,16 @@ class TeamController extends AbstractController
 
         $form->handleRequest($this->requestStack->getCurrentRequest());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->teamRepository->remove($team, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->teamRepository->remove($team, true);
 
-            $this->addFlash('notice', 'The team was deleted successfully.');
+                $this->addFlash('notice', 'The team was deleted successfully.');
 
-            return $this->redirectToRoute('team_index');
+                return $this->redirectToRoute('team_index');
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaTeam/team/team_delete.html.twig', [

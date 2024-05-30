@@ -42,14 +42,18 @@ class TeamMemberController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->teamMemberRepository->save($teamMember, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->teamMemberRepository->save($teamMember, true);
 
-            $this->addFlash('notice', 'The member was created successfully.');
+                $this->addFlash('notice', 'The member was created successfully.');
 
-            return $this->redirectToRoute('team_view', [
-                'id' => $team->getId(),
-            ]);
+                return $this->redirectToRoute('team_view', [
+                    'id' => $team->getId(),
+                ]);
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaTeam/team/member/team_member_create.html.twig', [
@@ -78,14 +82,18 @@ class TeamMemberController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->teamMemberRepository->save($teamMember, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->teamMemberRepository->save($teamMember, true);
 
-            $this->addFlash('notice', 'The team member was updated successfully.');
+                $this->addFlash('notice', 'The team member was updated successfully.');
 
-            return $this->redirectToRoute('team_view', [
-                'id' => $team->getId(),
-            ]);
+                return $this->redirectToRoute('team_view', [
+                    'id' => $team->getId(),
+                ]);
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaTeam/team/member/team_member_edit.html.twig', [
@@ -114,14 +122,18 @@ class TeamMemberController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->teamMemberRepository->remove($teamMember, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->teamMemberRepository->remove($teamMember, true);
 
-            $this->addFlash('notice', 'The team member was deleted successfully.');
+                $this->addFlash('notice', 'The team member was deleted successfully.');
 
-            return $this->redirectToRoute('team_view', [
-                'id' => $team->getId(),
-            ]);
+                return $this->redirectToRoute('team_view', [
+                    'id' => $team->getId(),
+                ]);
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaTeam/team/member/team_member_delete.html.twig', [
