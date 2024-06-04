@@ -104,7 +104,7 @@ class WysiwygExtension extends AbstractWysiwygExtension
 
         $image = $teamMember->getImage();
 
-        if ($image && $image->getPath()) {
+        if ($image) {
             $webPath = $this->fileManager->getWebPath($image);
 
             $schema['image'] = $this->urlHelper->getAbsoluteUrl($webPath);
