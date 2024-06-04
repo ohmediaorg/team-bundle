@@ -45,7 +45,7 @@
         <tr>
           <td>{{ team.name }}</td>
           <td>{{ team.members|length }}</td>
-          <td><code>{{ '{{ team(' ~ team.id ~ ') }}' }}</code></td>
+          <td><code>{{ '{{team(' ~ team.id ~ ')}}' }}</code></td>
           <td>{{ team.updatedAt|datetime }}</td>
           <td>
             {% if is_granted(attributes.team.view, team) %}
