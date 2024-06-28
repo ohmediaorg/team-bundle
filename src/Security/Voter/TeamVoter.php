@@ -57,7 +57,7 @@ class TeamVoter extends AbstractEntityVoter
 
     protected function canDelete(Team $team, User $loggedIn): bool
     {
-        $shortcode = sprintf('{{ team(%d) }}', $team->getId());
+        $shortcode = sprintf('team(%d)', $team->getId());
 
         return !$this->wysiwyg->shortcodesInUse($shortcode);
     }
