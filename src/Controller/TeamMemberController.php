@@ -3,12 +3,12 @@
 namespace OHMedia\TeamBundle\Controller;
 
 use OHMedia\BackendBundle\Routing\Attribute\Admin;
-use OHMedia\SecurityBundle\Form\DeleteType;
 use OHMedia\TeamBundle\Entity\Team;
 use OHMedia\TeamBundle\Entity\TeamMember;
 use OHMedia\TeamBundle\Form\TeamMemberType;
 use OHMedia\TeamBundle\Repository\TeamMemberRepository;
 use OHMedia\TeamBundle\Security\Voter\TeamMemberVoter;
+use OHMedia\UtilityBundle\Form\DeleteType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
