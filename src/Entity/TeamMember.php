@@ -5,14 +5,14 @@ namespace OHMedia\TeamBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OHMedia\FileBundle\Entity\File;
-use OHMedia\SecurityBundle\Entity\Traits\BlameableTrait;
 use OHMedia\TeamBundle\Repository\TeamMemberRepository;
+use OHMedia\UtilityBundle\Entity\BlameableEntityTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TeamMemberRepository::class)]
 class TeamMember
 {
-    use BlameableTrait;
+    use BlameableEntityTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
