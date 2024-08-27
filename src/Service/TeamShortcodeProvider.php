@@ -2,9 +2,9 @@
 
 namespace OHMedia\TeamBundle\Service;
 
-use OHMedia\BackendBundle\Shortcodes\AbstractShortcodeProvider;
-use OHMedia\BackendBundle\Shortcodes\Shortcode;
 use OHMedia\TeamBundle\Repository\TeamRepository;
+use OHMedia\WysiwygBundle\Shortcodes\AbstractShortcodeProvider;
+use OHMedia\WysiwygBundle\Shortcodes\Shortcode;
 
 class TeamShortcodeProvider extends AbstractShortcodeProvider
 {
