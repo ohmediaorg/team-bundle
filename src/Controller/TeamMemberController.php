@@ -9,6 +9,7 @@ use OHMedia\TeamBundle\Form\TeamMemberType;
 use OHMedia\TeamBundle\Repository\TeamMemberRepository;
 use OHMedia\TeamBundle\Security\Voter\TeamMemberVoter;
 use OHMedia\UtilityBundle\Form\DeleteType;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ class TeamMemberController extends AbstractController
     #[Route('/team/{id}/member/create', name: 'team_member_create', methods: ['GET', 'POST'])]
     public function create(
         Request $request,
-        Team $team,
+        #[MapEntity(id: 'id')] Team $team,
     ): Response {
         $teamMember = new TeamMember();
         $teamMember->setTeam($team);
@@ -66,7 +67,7 @@ class TeamMemberController extends AbstractController
     #[Route('/team/member/{id}/edit', name: 'team_member_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
-        TeamMember $teamMember,
+        #[MapEntity(id: 'id')] TeamMember $teamMember,
     ): Response {
         $this->denyAccessUnlessGranted(
             TeamMemberVoter::EDIT,
@@ -106,7 +107,7 @@ class TeamMemberController extends AbstractController
     #[Route('/team/member/{id}/delete', name: 'team_member_delete', methods: ['GET', 'POST'])]
     public function delete(
         Request $request,
-        TeamMember $teamMember,
+        #[MapEntity(id: 'id')] TeamMember $teamMember,
     ): Response {
         $this->denyAccessUnlessGranted(
             TeamMemberVoter::DELETE,

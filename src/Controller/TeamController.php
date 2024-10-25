@@ -13,6 +13,7 @@ use OHMedia\TeamBundle\Repository\TeamRepository;
 use OHMedia\TeamBundle\Security\Voter\TeamMemberVoter;
 use OHMedia\TeamBundle\Security\Voter\TeamVoter;
 use OHMedia\UtilityBundle\Form\DeleteType;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -93,8 +94,9 @@ class TeamController extends AbstractController
     }
 
     #[Route('/team/{id}', name: 'team_view', methods: ['GET'])]
-    public function view(Team $team): Response
-    {
+    public function view(
+        #[MapEntity(id: 'id')] Team $team,
+    ): Response {
         $this->denyAccessUnlessGranted(
             TeamVoter::VIEW,
             $team,
@@ -113,8 +115,9 @@ class TeamController extends AbstractController
     }
 
     #[Route('/team/{id}/members/reorder', name: 'team_member_reorder_post', methods: ['POST'])]
-    public function reorderPost(Team $team): Response
-    {
+    public function reorderPost(
+        #[MapEntity(id: 'id')] Team $team,
+    ): Response {
         $this->denyAccessUnlessGranted(
             TeamVoter::INDEX,
             $team,
@@ -155,8 +158,9 @@ class TeamController extends AbstractController
     }
 
     #[Route('/team/{id}/edit', name: 'team_edit', methods: ['GET', 'POST'])]
-    public function edit(Team $team): Response
-    {
+    public function edit(
+        #[MapEntity(id: 'id')] Team $team,
+    ): Response {
         $this->denyAccessUnlessGranted(
             TeamVoter::EDIT,
             $team,
@@ -190,8 +194,9 @@ class TeamController extends AbstractController
     }
 
     #[Route('/team/{id}/delete', name: 'team_delete', methods: ['GET', 'POST'])]
-    public function delete(Team $team): Response
-    {
+    public function delete(
+        #[MapEntity(id: 'id')] Team $team,
+    ): Response {
         $this->denyAccessUnlessGranted(
             TeamVoter::DELETE,
             $team,
