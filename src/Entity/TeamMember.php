@@ -62,7 +62,7 @@ class TeamMember
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
-    private ?string $twitter = null;
+    private ?string $bluesky = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
@@ -208,14 +208,14 @@ class TeamMember
         return $this;
     }
 
-    public function getTwitter(): ?string
+    public function getBluesky(): ?string
     {
-        return $this->twitter;
+        return $this->bluesky;
     }
 
-    public function setTwitter(?string $twitter): static
+    public function setBluesky(?string $bluesky): static
     {
-        $this->twitter = $twitter;
+        $this->bluesky = $bluesky;
 
         return $this;
     }

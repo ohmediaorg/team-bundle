@@ -35,7 +35,7 @@ class WysiwygExtension extends AbstractWysiwygExtension
         ];
     }
 
-    public function team(Environment $twig, int $id = null)
+    public function team(Environment $twig, ?int $id = null)
     {
         if (isset($this->teams[$id])) {
             // prevent infinite recursion
@@ -124,8 +124,8 @@ class WysiwygExtension extends AbstractWysiwygExtension
             $socials[] = $facebook;
         }
 
-        if ($twitter = $teamMember->getTwitter()) {
-            $socials[] = $twitter;
+        if ($bluesky = $teamMember->getBluesky()) {
+            $socials[] = $bluesky;
         }
 
         if ($instagram = $teamMember->getInstagram()) {

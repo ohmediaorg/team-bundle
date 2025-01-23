@@ -54,7 +54,7 @@ class TeamMemberType extends AbstractType
             'required' => false,
         ]);
 
-        $builder->add('twitter', UrlType::class, [
+        $builder->add('bluesky', UrlType::class, [
             'required' => false,
         ]);
 
