@@ -53,7 +53,6 @@
           <th style="width:1rem">&nbsp;</th>
           <th>Name</th>
           <th>Contact</th>
-          <th>Socials</th>
           <th></th>
         </tr>
       </thead>
@@ -84,20 +83,6 @@
             {% endif %}
             {% if team_member.phone %}
             <small class="d-block text-muted">{{ team_member.phone }}</small>
-            {% endif %}
-          </td>
-          <td>
-            {% if team_member.facebook %}
-            <small class="d-block text-muted">{{ team_member.facebook }}</small>
-            {% endif %}
-            {% if team_member.bluesky %}
-            <small class="d-block text-muted">{{ team_member.bluesky }}</small>
-            {% endif %}
-            {% if team_member.instagram %}
-            <small class="d-block text-muted">{{ team_member.instagram }}</small>
-            {% endif %}
-            {% if team_member.linkedIn %}
-            <small class="d-block text-muted">{{ team_member.linkedIn }}</small>
             {% endif %}
           </td>
           <td>
