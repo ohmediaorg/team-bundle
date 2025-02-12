@@ -118,28 +118,6 @@ class WysiwygExtension extends AbstractWysiwygExtension
             $schema['telephone'] = $phone;
         }
 
-        $socials = [];
-
-        if ($facebook = $teamMember->getFacebook()) {
-            $socials[] = $facebook;
-        }
-
-        if ($bluesky = $teamMember->getBluesky()) {
-            $socials[] = $bluesky;
-        }
-
-        if ($instagram = $teamMember->getInstagram()) {
-            $socials[] = $instagram;
-        }
-
-        if ($linkedIn = $teamMember->getLinkedIn()) {
-            $socials[] = $linkedIn;
-        }
-
-        if ($socials) {
-            $schema['sameAs'] = $socials;
-        }
-
         return $schema;
     }
 }

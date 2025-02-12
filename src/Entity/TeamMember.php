@@ -56,22 +56,6 @@ class TeamMember
     #[Assert\Length(max: 50)]
     private ?string $phone = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
-    private ?string $facebook = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
-    private ?string $bluesky = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
-    private ?string $instagram = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
-    private ?string $linked_in = null;
-
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?File $image = null;
 
@@ -192,54 +176,6 @@ class TeamMember
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
-
-        return $this;
-    }
-
-    public function getFacebook(): ?string
-    {
-        return $this->facebook;
-    }
-
-    public function setFacebook(?string $facebook): static
-    {
-        $this->facebook = $facebook;
-
-        return $this;
-    }
-
-    public function getBluesky(): ?string
-    {
-        return $this->bluesky;
-    }
-
-    public function setBluesky(?string $bluesky): static
-    {
-        $this->bluesky = $bluesky;
-
-        return $this;
-    }
-
-    public function getInstagram(): ?string
-    {
-        return $this->instagram;
-    }
-
-    public function setInstagram(?string $instagram): static
-    {
-        $this->instagram = $instagram;
-
-        return $this;
-    }
-
-    public function getLinkedIn(): ?string
-    {
-        return $this->linked_in;
-    }
-
-    public function setLinkedIn(?string $linked_in): static
-    {
-        $this->linked_in = $linked_in;
 
         return $this;
     }
