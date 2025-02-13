@@ -26,34 +26,34 @@ class TeamMember
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $team = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    #[Assert\Length(max: 50)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $honorific = null;
 
-    #[ORM\Column(length: 75)]
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Assert\Length(max: 75)]
+    #[Assert\Length(max: 255)]
     private ?string $first_name = null;
 
-    #[ORM\Column(length: 75)]
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Assert\Length(max: 75)]
+    #[Assert\Length(max: 255)]
     private ?string $last_name = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    #[Assert\Length(max: 50)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $designation = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
-    #[Assert\Length(max: 100)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    #[Assert\Length(max: 50)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $phone = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
