@@ -30,22 +30,22 @@ class TeamMember
     #[Assert\Length(max: 50)]
     private ?string $honorific = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 75)]
     #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
+    #[Assert\Length(max: 75)]
     private ?string $first_name = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 75)]
     #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
+    #[Assert\Length(max: 75)]
     private ?string $last_name = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     #[Assert\Length(max: 50)]
     private ?string $designation = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    #[Assert\Length(max: 50)]
+    #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(max: 100)]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
