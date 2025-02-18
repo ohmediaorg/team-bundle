@@ -137,7 +137,7 @@ class TeamMember
         return $this->designation;
     }
 
-    public function setDesignation(string $designation): static
+    public function setDesignation(?string $designation): static
     {
         $this->designation = $designation;
 
