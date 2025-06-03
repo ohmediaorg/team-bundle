@@ -16,8 +16,6 @@ class TeamMemberType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $teamMember = $options['data'];
-
         $builder->add('honorific', TextType::class, [
             'help' => 'Mr., Mrs., Dr., etc.',
             'required' => false,
@@ -52,7 +50,6 @@ class TeamMemberType extends AbstractType
         $builder->add('image', FileEntityType::class, [
             'required' => false,
             'image' => true,
-            'data' => $teamMember->getImage(),
         ]);
 
         $builder->add('bio', WysiwygType::class, [
