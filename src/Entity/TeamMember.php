@@ -57,6 +57,7 @@ class TeamMember
     private ?string $phone = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Assert\Valid]
     private ?File $image = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
