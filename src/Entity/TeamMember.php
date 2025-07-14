@@ -27,8 +27,8 @@ class TeamMember
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $team = null;
 
-    #[ORM\Column(length: 15, nullable: true)]
-    #[Assert\Length(max: 15)]
+    #[ORM\Column(length: 25, nullable: true)]
+    #[Assert\Length(max: 25)]
     private ?string $honorific = null;
 
     #[ORM\Column(length: 50)]
@@ -41,8 +41,8 @@ class TeamMember
     #[Assert\Length(max: 50)]
     private ?string $last_name = null;
 
-    #[ORM\Column(length: 15, nullable: true)]
-    #[Assert\Length(max: 15)]
+    #[ORM\Column(length: 25, nullable: true)]
+    #[Assert\Length(max: 25)]
     private ?string $designation = null;
 
     #[ORM\Column(length: 100, nullable: true)]
