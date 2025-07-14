@@ -4,10 +4,10 @@ namespace OHMedia\TeamBundle\Form;
 
 use OHMedia\FileBundle\Form\Type\FileEntityType;
 use OHMedia\TeamBundle\Entity\TeamMember;
+use OHMedia\UtilityBundle\Form\PhoneType;
 use OHMedia\WysiwygBundle\Form\Type\WysiwygType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -43,7 +43,7 @@ class TeamMemberType extends AbstractType
             'required' => false,
         ]);
 
-        $builder->add('phone', TelType::class, [
+        $builder->add('phone', PhoneType::class, [
             'required' => false,
         ]);
 

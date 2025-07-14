@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use OHMedia\FileBundle\Entity\File;
 use OHMedia\TeamBundle\Repository\TeamMemberRepository;
 use OHMedia\UtilityBundle\Entity\BlameableEntityTrait;
+use OHMedia\UtilityBundle\Validator\Phone;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TeamMemberRepository::class)]
@@ -26,34 +27,35 @@ class TeamMember
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $team = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 15, nullable: true)]
+    #[Assert\Length(max: 15)]
     private ?string $honorific = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: 50)]
     private ?string $first_name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: 50)]
     private ?string $last_name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 15, nullable: true)]
+    #[Assert\Length(max: 15)]
     private ?string $designation = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(max: 100)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 180, nullable: true)]
+    #[Assert\Length(max: 180)]
+    #[Assert\Email]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 12, nullable: true)]
+    #[Phone]
     private ?string $phone = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
