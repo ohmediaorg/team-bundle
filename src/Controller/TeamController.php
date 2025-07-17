@@ -69,7 +69,7 @@ class TeamController extends AbstractController
 
         $form = $this->createForm(TeamType::class, $team);
 
-        $form->add('submit', SubmitType::class);
+        $form->add('save', SubmitType::class);
 
         $form->handleRequest($this->requestStack->getCurrentRequest());
 
@@ -169,7 +169,7 @@ class TeamController extends AbstractController
 
         $form = $this->createForm(TeamType::class, $team);
 
-        $form->add('submit', SubmitType::class);
+        $form->add('save', SubmitType::class);
 
         $form->handleRequest($this->requestStack->getCurrentRequest());
 
