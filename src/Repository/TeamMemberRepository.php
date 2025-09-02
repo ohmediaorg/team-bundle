@@ -46,18 +46,27 @@ class TeamMemberRepository extends ServiceEntityRepository implements WysiwygRep
             ->setParameter('shortcode', '%'.$shortcode.'%');
     }
 
-    public function getEntityRoute(): string
+    public function getShortcodeRoute(): string
     {
         return 'team_member_edit';
     }
 
-    public function getEntityRouteParams(mixed $entity): array
+    public function getShortcodeRouteParams(mixed $entity): array
     {
         return ['id' => $entity->getId()];
     }
 
-    public function getEntityName(): string
+    public function getShortcodeHeading(): string
     {
-        return 'Team Member';
+        return 'Teams';
+    }
+
+    public function getShortcodeLinkText(mixed $entity): string
+    {
+        return sprintf(
+            '%s - Team Member (ID:%s)',
+            (string) $entity->getTeam(),
+            $entity->getId(),
+        );
     }
 }
