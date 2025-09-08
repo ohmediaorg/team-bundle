@@ -3,8 +3,7 @@
 namespace OHMedia\TeamBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Query\Parameter;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use OHMedia\TeamBundle\Entity\TeamMember;
 use OHMedia\WysiwygBundle\Repository\WysiwygRepositoryInterface;
@@ -40,21 +39,34 @@ class TeamMemberRepository extends ServiceEntityRepository implements WysiwygRep
         }
     }
 
-    public function containsWysiwygShortcodes(string ...$shortcodes): bool
+    public function getShortcodeQueryBuilder(string $shortcode): QueryBuilder
     {
-        $ors = [];
-        $params = new ArrayCollection();
-
-        foreach ($shortcodes as $i => $shortcode) {
-            $ors[] = 'tm.bio LIKE :shortcode_'.$i;
-            $params[] = new Parameter('shortcode_'.$i, '%'.$shortcode.'%');
-        }
-
         return $this->createQueryBuilder('tm')
-            ->select('COUNT(tm)')
-            ->where(implode(' OR ', $ors))
-            ->setParameters($params)
-            ->getQuery()
-            ->getSingleScalarResult() > 0;
+            ->where('tm.bio LIKE :shortcode')
+            ->setParameter('shortcode', '%'.$shortcode.'%');
+    }
+
+    public function getShortcodeRoute(): string
+    {
+        return 'team_member_edit';
+    }
+
+    public function getShortcodeRouteParams(mixed $entity): array
+    {
+        return ['id' => $entity->getId()];
+    }
+
+    public function getShortcodeHeading(): string
+    {
+        return 'Teams';
+    }
+
+    public function getShortcodeLinkText(mixed $entity): string
+    {
+        return sprintf(
+            '%s - Team Member (ID:%s)',
+            (string) $entity->getTeam(),
+            $entity->getId(),
+        );
     }
 }
