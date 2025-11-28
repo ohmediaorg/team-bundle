@@ -14,7 +14,7 @@ class TeamNavItemProvider extends AbstractNavItemProvider
     {
         if ($this->isGranted(TeamVoter::INDEX, new Team())) {
             return (new NavLink('Teams', 'team_index'))
-                ->setIcon('people-fill');
+                ->setIcon('people');
         }
 
         return null;
