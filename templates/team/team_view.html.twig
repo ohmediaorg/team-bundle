@@ -16,19 +16,19 @@
 <div class="btn-group btn-group-sm">
   {% if can_create_member %}
     <a class="btn btn-primary" href="{{ create_member_href }}">
-      {{ bootstrap_icon('plus') }}
+      {{ bootstrap_icon('plus-lg') }}
       Add Member
     </a>
   {% endif %}
   {% if is_granted(attributes.team.edit, team) %}
     <a class="btn btn-primary" href="{{ path('team_edit', {id: team.id}) }}">
-      {{ bootstrap_icon('pen-fill') }}
+      {{ bootstrap_icon('pencil') }}
       Edit
     </a>
   {% endif %}
   {% if is_granted(attributes.team_member.delete, team) %}
     <a class="btn btn-danger" href="{{ path('team_delete', {id: team.id}) }}" data-confirm="Are you sure you want to delete this team? Clicking OK will take you to a verification step to delete this entry.">
-      {{ bootstrap_icon('trash-fill') }}
+      {{ bootstrap_icon('trash') }}
       Delete
     </a>
   {% endif %}
@@ -88,13 +88,13 @@
           <td>
             {% if is_granted(attributes.team_member.edit, team_member) %}
             <a class="btn btn-sm btn-primary btn-action" href="{{ path('team_member_edit', {id: team_member.id}) }}" title="Edit">
-              {{ bootstrap_icon('pen-fill') }}
+              {{ bootstrap_icon('pencil') }}
               <span class="visually-hidden">Edit</span>
             </a>
             {% endif %}
             {% if is_granted(attributes.team_member.delete, team_member) %}
             <a class="btn btn-sm btn-danger btn-action" href="{{ path('team_member_delete', {id: team_member.id}) }}" title="Delete" data-confirm="Are you sure you want to delete this member? Clicking OK will take you to a verification step to delete this entry.">
-              {{ bootstrap_icon('trash-fill') }}
+              {{ bootstrap_icon('trash') }}
               <span class="visually-hidden">Delete</span>
             </a>
             {% endif %}
