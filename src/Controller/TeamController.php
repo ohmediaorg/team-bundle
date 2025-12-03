@@ -3,6 +3,7 @@
 namespace OHMedia\TeamBundle\Controller;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\QueryBuilder;
 use OHMedia\BackendBundle\Form\MultiSaveType;
 use OHMedia\BackendBundle\Routing\Attribute\Admin;
 use OHMedia\BootstrapBundle\Service\Paginator;
@@ -16,9 +17,12 @@ use OHMedia\TeamBundle\Security\Voter\TeamVoter;
 use OHMedia\UtilityBundle\Form\DeleteType;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,7 +42,7 @@ class TeamController extends AbstractController
     }
 
     #[Route('/teams', name: 'team_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $newTeam = new Team();
 
@@ -51,11 +55,62 @@ class TeamController extends AbstractController
         $qb = $this->teamRepository->createQueryBuilder('t');
         $qb->orderBy('t.name', 'asc');
 
+        $searchForm = $this->getSearchForm($request);
+
+        $this->applySearch($searchForm, $qb);
+
         return $this->render('@OHMediaTeam/team/team_index.html.twig', [
             'pagination' => $this->paginator->paginate($qb, 20),
             'new_team' => $newTeam,
             'attributes' => $this->getAttributes(),
+            'search_form' => $searchForm,
         ]);
+    }
+
+    private function getSearchForm(Request $request): FormInterface
+    {
+        $formBuilder = $this->container->get('form.factory')
+            ->createNamedBuilder('', FormType::class, null, [
+                'csrf_protection' => false,
+            ]);
+
+        $formBuilder->setMethod('GET');
+
+        $formBuilder->add('search', TextType::class, [
+            'required' => false,
+            'attr' => [
+                'placeholder' => 'Team/member name',
+            ],
+        ]);
+
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest($request);
+
+        return $form;
+    }
+
+    private function applySearch(FormInterface $form, QueryBuilder $qb): void
+    {
+        $search = $form->get('search')->getData();
+
+        if ($search) {
+            $qb->leftJoin('t.members', 'm');
+
+            $searchFields = [
+                't.name',
+                'm.first_name',
+                'm.last_name',
+            ];
+
+            $searchLikes = [];
+            foreach ($searchFields as $searchField) {
+                $searchLikes[] = "$searchField LIKE :search";
+            }
+
+            $qb->andWhere('('.implode(' OR ', $searchLikes).')')
+                ->setParameter('search', '%'.$search.'%');
+        }
     }
 
     #[Route('/team/create', name: 'team_create', methods: ['GET', 'POST'])]
