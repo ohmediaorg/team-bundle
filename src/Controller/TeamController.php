@@ -3,6 +3,7 @@
 namespace OHMedia\TeamBundle\Controller;
 
 use Doctrine\DBAL\Connection;
+use OHMedia\BackendBundle\Form\MultiSaveType;
 use OHMedia\BackendBundle\Routing\Attribute\Admin;
 use OHMedia\BootstrapBundle\Service\Paginator;
 use OHMedia\TeamBundle\Entity\Team;
@@ -16,6 +17,7 @@ use OHMedia\UtilityBundle\Form\DeleteType;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,7 +71,7 @@ class TeamController extends AbstractController
 
         $form = $this->createForm(TeamType::class, $team);
 
-        $form->add('save', SubmitType::class);
+        $form->add('save', MultiSaveType::class);
 
         $form->handleRequest($this->requestStack->getCurrentRequest());
 
@@ -79,9 +81,7 @@ class TeamController extends AbstractController
 
                 $this->addFlash('notice', 'The team was created successfully.');
 
-                return $this->redirectToRoute('team_view', [
-                    'id' => $team->getId(),
-                ]);
+                return $this->redirectForm($team, $form);
             }
 
             $this->addFlash('error', 'There are some errors in the form below.');
@@ -169,7 +169,7 @@ class TeamController extends AbstractController
 
         $form = $this->createForm(TeamType::class, $team);
 
-        $form->add('save', SubmitType::class);
+        $form->add('save', MultiSaveType::class);
 
         $form->handleRequest($this->requestStack->getCurrentRequest());
 
@@ -179,9 +179,7 @@ class TeamController extends AbstractController
 
                 $this->addFlash('notice', 'The team was updated successfully.');
 
-                return $this->redirectToRoute('team_view', [
-                    'id' => $team->getId(),
-                ]);
+                return $this->redirectForm($team, $form);
             }
 
             $this->addFlash('error', 'There are some errors in the form below.');
@@ -191,6 +189,23 @@ class TeamController extends AbstractController
             'form' => $form->createView(),
             'team' => $team,
         ]);
+    }
+
+    private function redirectForm(Team $team, FormInterface $form): Response
+    {
+        $clickedButtonName = $form->getClickedButton()->getName() ?? null;
+
+        if ('keep_editing' === $clickedButtonName) {
+            return $this->redirectToRoute('team_edit', [
+                'id' => $team->getId(),
+            ]);
+        } elseif ('add_another' === $clickedButtonName) {
+            return $this->redirectToRoute('team_create');
+        } else {
+            return $this->redirectToRoute('team_view', [
+                'id' => $team->getId(),
+            ]);
+        }
     }
 
     #[Route('/team/{id}/delete', name: 'team_delete', methods: ['GET', 'POST'])]
