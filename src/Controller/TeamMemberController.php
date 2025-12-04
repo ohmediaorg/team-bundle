@@ -2,6 +2,7 @@
 
 namespace OHMedia\TeamBundle\Controller;
 
+use OHMedia\BackendBundle\Form\MultiSaveType;
 use OHMedia\BackendBundle\Routing\Attribute\Admin;
 use OHMedia\TeamBundle\Entity\Team;
 use OHMedia\TeamBundle\Entity\TeamMember;
@@ -12,6 +13,7 @@ use OHMedia\UtilityBundle\Form\DeleteType;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,7 +41,7 @@ class TeamMemberController extends AbstractController
 
         $form = $this->createForm(TeamMemberType::class, $teamMember);
 
-        $form->add('save', SubmitType::class);
+        $form->add('save', MultiSaveType::class);
 
         $form->handleRequest($request);
 
@@ -49,9 +51,7 @@ class TeamMemberController extends AbstractController
 
                 $this->addFlash('notice', 'The member was created successfully.');
 
-                return $this->redirectToRoute('team_view', [
-                    'id' => $team->getId(),
-                ]);
+                return $this->redirectForm($teamMember, $form);
             }
 
             $this->addFlash('error', 'There are some errors in the form below.');
@@ -79,7 +79,7 @@ class TeamMemberController extends AbstractController
 
         $form = $this->createForm(TeamMemberType::class, $teamMember);
 
-        $form->add('save', SubmitType::class);
+        $form->add('save', MultiSaveType::class);
 
         $form->handleRequest($request);
 
@@ -89,9 +89,7 @@ class TeamMemberController extends AbstractController
 
                 $this->addFlash('notice', 'The team member was updated successfully.');
 
-                return $this->redirectToRoute('team_view', [
-                    'id' => $team->getId(),
-                ]);
+                return $this->redirectForm($teamMember, $form);
             }
 
             $this->addFlash('error', 'There are some errors in the form below.');
@@ -102,6 +100,25 @@ class TeamMemberController extends AbstractController
             'team_member' => $teamMember,
             'team' => $team,
         ]);
+    }
+
+    private function redirectForm(TeamMember $teamMember, FormInterface $form): Response
+    {
+        $clickedButtonName = $form->getClickedButton()->getName() ?? null;
+
+        if ('keep_editing' === $clickedButtonName) {
+            return $this->redirectToRoute('team_member_edit', [
+                'id' => $teamMember->getId(),
+            ]);
+        } elseif ('add_another' === $clickedButtonName) {
+            return $this->redirectToRoute('team_member_create', [
+                'id' => $teamMember->getTeam()->getId(),
+            ]);
+        } else {
+            return $this->redirectToRoute('team_view', [
+                'id' => $teamMember->getTeam()->getId(),
+            ]);
+        }
     }
 
     #[Route('/team/member/{id}/delete', name: 'team_member_delete', methods: ['GET', 'POST'])]

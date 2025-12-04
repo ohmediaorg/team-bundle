@@ -3,6 +3,8 @@
 namespace OHMedia\TeamBundle\Controller;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\QueryBuilder;
+use OHMedia\BackendBundle\Form\MultiSaveType;
 use OHMedia\BackendBundle\Routing\Attribute\Admin;
 use OHMedia\BootstrapBundle\Service\Paginator;
 use OHMedia\TeamBundle\Entity\Team;
@@ -15,8 +17,12 @@ use OHMedia\TeamBundle\Security\Voter\TeamVoter;
 use OHMedia\UtilityBundle\Form\DeleteType;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,7 +42,7 @@ class TeamController extends AbstractController
     }
 
     #[Route('/teams', name: 'team_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $newTeam = new Team();
 
@@ -49,11 +55,60 @@ class TeamController extends AbstractController
         $qb = $this->teamRepository->createQueryBuilder('t');
         $qb->orderBy('t.name', 'asc');
 
+        $searchForm = $this->getSearchForm($request);
+
+        $this->applySearch($searchForm, $qb);
+
         return $this->render('@OHMediaTeam/team/team_index.html.twig', [
             'pagination' => $this->paginator->paginate($qb, 20),
             'new_team' => $newTeam,
             'attributes' => $this->getAttributes(),
+            'search_form' => $searchForm,
         ]);
+    }
+
+    private function getSearchForm(Request $request): FormInterface
+    {
+        $formBuilder = $this->container->get('form.factory')
+            ->createNamedBuilder('', FormType::class, null, [
+                'csrf_protection' => false,
+            ]);
+
+        $formBuilder->setMethod('GET');
+
+        $formBuilder->add('search', SearchType::class, [
+            'required' => false,
+            'label' => 'Team/member name',
+        ]);
+
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest($request);
+
+        return $form;
+    }
+
+    private function applySearch(FormInterface $form, QueryBuilder $qb): void
+    {
+        $search = $form->get('search')->getData();
+
+        if ($search) {
+            $qb->leftJoin('t.members', 'm');
+
+            $searchFields = [
+                't.name',
+                'm.first_name',
+                'm.last_name',
+            ];
+
+            $searchLikes = [];
+            foreach ($searchFields as $searchField) {
+                $searchLikes[] = "$searchField LIKE :search";
+            }
+
+            $qb->andWhere('('.implode(' OR ', $searchLikes).')')
+                ->setParameter('search', '%'.$search.'%');
+        }
     }
 
     #[Route('/team/create', name: 'team_create', methods: ['GET', 'POST'])]
@@ -69,7 +124,7 @@ class TeamController extends AbstractController
 
         $form = $this->createForm(TeamType::class, $team);
 
-        $form->add('save', SubmitType::class);
+        $form->add('save', MultiSaveType::class);
 
         $form->handleRequest($this->requestStack->getCurrentRequest());
 
@@ -79,9 +134,7 @@ class TeamController extends AbstractController
 
                 $this->addFlash('notice', 'The team was created successfully.');
 
-                return $this->redirectToRoute('team_view', [
-                    'id' => $team->getId(),
-                ]);
+                return $this->redirectForm($team, $form);
             }
 
             $this->addFlash('error', 'There are some errors in the form below.');
@@ -169,7 +222,7 @@ class TeamController extends AbstractController
 
         $form = $this->createForm(TeamType::class, $team);
 
-        $form->add('save', SubmitType::class);
+        $form->add('save', MultiSaveType::class);
 
         $form->handleRequest($this->requestStack->getCurrentRequest());
 
@@ -179,9 +232,7 @@ class TeamController extends AbstractController
 
                 $this->addFlash('notice', 'The team was updated successfully.');
 
-                return $this->redirectToRoute('team_view', [
-                    'id' => $team->getId(),
-                ]);
+                return $this->redirectForm($team, $form);
             }
 
             $this->addFlash('error', 'There are some errors in the form below.');
@@ -191,6 +242,23 @@ class TeamController extends AbstractController
             'form' => $form->createView(),
             'team' => $team,
         ]);
+    }
+
+    private function redirectForm(Team $team, FormInterface $form): Response
+    {
+        $clickedButtonName = $form->getClickedButton()->getName() ?? null;
+
+        if ('keep_editing' === $clickedButtonName) {
+            return $this->redirectToRoute('team_edit', [
+                'id' => $team->getId(),
+            ]);
+        } elseif ('add_another' === $clickedButtonName) {
+            return $this->redirectToRoute('team_create');
+        } else {
+            return $this->redirectToRoute('team_view', [
+                'id' => $team->getId(),
+            ]);
+        }
     }
 
     #[Route('/team/{id}/delete', name: 'team_delete', methods: ['GET', 'POST'])]
