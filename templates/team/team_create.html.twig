@@ -3,8 +3,8 @@
 {% set form_title = 'Create Team' %}
 
 {% block breadcrumbs %}
-{{ bootstrap_breadcrumbs(
-  bootstrap_breadcrumb(bootstrap_icon('people-fill') ~ ' Teams', 'team_index'),
-  bootstrap_breadcrumb('Create'),
-) }}
+  {{ bootstrap_breadcrumbs(
+    bootstrap_breadcrumb(bootstrap_icon('people') ~ ' Teams', 'team_index'),
+    bootstrap_breadcrumb('Create'),
+  ) }}
 {% endblock %}

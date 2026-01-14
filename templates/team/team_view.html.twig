@@ -3,114 +3,130 @@
 {% block meta_title %}{{ team }} | Teams{% endblock %}
 
 {% block breadcrumbs %}
-{{ bootstrap_breadcrumbs(
-  bootstrap_breadcrumb(bootstrap_icon('people-fill') ~ ' Teams', 'team_index'),
-  bootstrap_breadcrumb(team),
-) }}
+  {{ bootstrap_breadcrumbs(
+    bootstrap_breadcrumb(bootstrap_icon('people') ~ ' Teams', 'team_index'),
+    bootstrap_breadcrumb(team),
+  ) }}
 {% endblock %}
 
 {% set can_create_member = is_granted(attributes.team_member.create, new_team_member) %}
 {% set create_member_href = path('team_member_create', {id: team.id}) %}
 
 {% block actions %}
-<div class="btn-group btn-group-sm">
   {% if can_create_member %}
     <a class="btn btn-primary" href="{{ create_member_href }}">
-      {{ bootstrap_icon('plus') }}
+      {{ bootstrap_icon('plus-lg') }}
       Add Member
     </a>
   {% endif %}
   {% if is_granted(attributes.team.edit, team) %}
-    <a class="btn btn-primary" href="{{ path('team_edit', {id: team.id}) }}">
-      {{ bootstrap_icon('pen-fill') }}
-      Edit
+    <a class="btn btn-secondary" href="{{ path('team_edit', {id: team.id}) }}">
+      {{ bootstrap_icon('pencil') }}
+      Edit Team
     </a>
   {% endif %}
   {% if is_granted(attributes.team_member.delete, team) %}
     <a class="btn btn-danger" href="{{ path('team_delete', {id: team.id}) }}" data-confirm="Are you sure you want to delete this team? Clicking OK will take you to a verification step to delete this entry.">
-      {{ bootstrap_icon('trash-fill') }}
-      Delete
+      {{ bootstrap_icon('trash') }}
+      Delete Team
     </a>
   {% endif %}
-</div>
 {% endblock %}
 
 {% block main %}
-<div class="card">
-  <div class="card-body">
-    <div class="card-title card-title-with-count">
-      <h1 class="card-title-heading">Members</h1>
-      <div class="card-title-count">
-        {{ bootstrap_badge_primary(team.members|length) }}
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title card-title-with-count">
+        <h1 class="card-title-heading">Members</h1>
+        <div class="card-title-count">
+          {{ bootstrap_badge_primary(team.members|length) }}
+        </div>
       </div>
-    </div>
-    <h2 class="card-subtitle mb-3 text-body-secondary h5">{{ team }}</h2>
+      <h2 class="card-subtitle mb-3 text-body-secondary h5">{{ team }}</h2>
 
-    {% if team.members|length %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th style="width:1rem">&nbsp;</th>
-          <th>Name</th>
-          <th>Contact</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody
-        data-sortable
-        data-sortable-csrf-name="{{ csrf_token_name }}"
-        data-sortable-csrf-token="{{ csrf_token(csrf_token_name) }}"
-        data-sortable-url="{{ path('team_member_reorder_post', {id: team.id}) }}"
-      >
-      {% for team_member in team.members %}
-        <tr data-id="{{ team_member.id }}">
-          <td data-handle>{{ bootstrap_icon('arrows-move') }}</td>
-          <td>
-            {% if team_member.honorific %}
-            <small class="d-block text-muted">{{ team_member.honorific }}</small>
-            {% endif %}
-            {{ team_member }}
-            {% if team_member.designation %}
-            <small class="d-block text-muted">{{ team_member.designation }}</small>
-            {% endif %}
-            {% if team_member.title %}
-            <small class="d-block text-muted">{{ team_member.title }}</small>
-            {% endif %}
-          </td>
-          <td>
-            {% if team_member.email %}
-            <small class="d-block text-muted">{{ team_member.email }}</small>
-            {% endif %}
-            {% if team_member.phone %}
-            <small class="d-block text-muted">{{ team_member.phone }}</small>
-            {% endif %}
-          </td>
-          <td>
-            {% if is_granted(attributes.team_member.edit, team_member) %}
-            <a class="btn btn-sm btn-primary btn-action" href="{{ path('team_member_edit', {id: team_member.id}) }}" title="Edit">
-              {{ bootstrap_icon('pen-fill') }}
-              <span class="visually-hidden">Edit</span>
-            </a>
-            {% endif %}
-            {% if is_granted(attributes.team_member.delete, team_member) %}
-            <a class="btn btn-sm btn-danger btn-action" href="{{ path('team_member_delete', {id: team_member.id}) }}" title="Delete" data-confirm="Are you sure you want to delete this member? Clicking OK will take you to a verification step to delete this entry.">
-              {{ bootstrap_icon('trash-fill') }}
-              <span class="visually-hidden">Delete</span>
-            </a>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-    <p>
-      No members found.
-      {% if can_create_member %}
-      <a href="{{ create_member_href }}">Click here to add a member.</a>
+      {% if team.members|length %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="width:1rem">&nbsp;</th>
+              <th>Name</th>
+              <th>Contact</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody
+            data-sortable
+            data-sortable-csrf-name="{{ csrf_token_name }}"
+            data-sortable-csrf-token="{{ csrf_token(csrf_token_name) }}"
+            data-sortable-url="{{ path('team_member_reorder_post', {id: team.id}) }}"
+          >
+            {% for team_member in team.members %}
+              {{ _self.table_row(team_member, attributes) }}
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>
+          No members found.
+          {% if can_create_member %}
+            <a href="{{ create_member_href }}">Click here to add a member.</a>
+          {% endif %}
+        </p>
       {% endif %}
-    </p>
-    {% endif %}
+    </div>
   </div>
-</div>
 {% endblock %}
+
+{% macro table_row(team_member, attributes) %}
+  {% set row_actions = [] %}
+
+  {% if is_granted(attributes.team_member.edit, team_member) %}
+    {% set row_actions = row_actions|merge([{
+      route: 'team_member_edit',
+      route_params: {id: team_member.id},
+      color: 'secondary',
+      icon: 'pencil',
+      text: 'Edit Member',
+    }]) %}
+  {% endif %}
+
+  {% if is_granted(attributes.team_member.delete, team_member) %}
+    {% set row_actions = row_actions|merge([{
+      route: 'team_member_delete',
+      route_params: {id: team_member.id},
+      color: 'danger',
+      icon: 'trash',
+      text: 'Delete Member',
+      confirm: 'Are you sure you want to delete this member? Clicking OK will take you to a verification step to delete this entry.',
+    }]) %}
+  {% endif %}
+
+  <tr data-id="{{ team_member.id }}">
+    <td data-handle>{{ bootstrap_icon('arrows-move') }}</td>
+    <td>
+      {% if team_member.honorific %}
+        <small class="d-block text-muted">{{ team_member.honorific }}</small>
+      {% endif %}
+      {{ team_member }}
+      {% if team_member.designation %}
+        <small class="d-block text-muted">{{ team_member.designation }}</small>
+      {% endif %}
+      {% if team_member.title %}
+        <small class="d-block text-muted">{{ team_member.title }}</small>
+      {% endif %}
+    </td>
+    <td>
+      {% if team_member.email %}
+        <small class="d-block text-muted">{{ team_member.email }}</small>
+      {% endif %}
+      {% if team_member.phone %}
+        <small class="d-block text-muted">{{ team_member.phone }}</small>
+      {% endif %}
+    </td>
+    <td>
+      {% include '@OHMediaBackend/widget/row_actions.html.twig' with {
+        row_actions: row_actions,
+      } only %}
+    </td>
+  </tr>
+{% endmacro %}

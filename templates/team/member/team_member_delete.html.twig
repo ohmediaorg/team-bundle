@@ -3,9 +3,9 @@
 {% set form_title = 'Delete Member "' ~ team_member ~ '"' %}
 
 {% block breadcrumbs %}
-{{ bootstrap_breadcrumbs(
-  bootstrap_breadcrumb(bootstrap_icon('people-fill') ~ ' Teams', 'team_index'),
-  bootstrap_breadcrumb(team, 'team_view', {id: team.id}),
-  bootstrap_breadcrumb('Delete Member'),
-) }}
+  {{ bootstrap_breadcrumbs(
+    bootstrap_breadcrumb(bootstrap_icon('people') ~ ' Teams', 'team_index'),
+    bootstrap_breadcrumb(team, 'team_view', {id: team.id}),
+    bootstrap_breadcrumb('Delete Member'),
+  ) }}
 {% endblock %}
