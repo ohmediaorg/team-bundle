@@ -53,7 +53,7 @@ class TeamController extends AbstractController
         );
 
         $qb = $this->teamRepository->createQueryBuilder('t');
-        $qb->orderBy('t.name', 'asc');
+        $qb->orderBy('t.name', \SortDirection::Ascending);
 
         $searchForm = $this->getSearchForm($request);
 

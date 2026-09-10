@@ -20,7 +20,7 @@ class TeamShortcodeProvider extends AbstractShortcodeProvider
     public function buildShortcodes(): void
     {
         $teams = $this->teamRepository->createQueryBuilder('t')
-            ->orderBy('t.name', 'asc')
+            ->orderBy('t.name', \SortDirection::Ascending)
             ->getQuery()
             ->getResult();
 

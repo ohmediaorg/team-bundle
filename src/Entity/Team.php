@@ -28,7 +28,7 @@ class Team
      * @var Collection<int, TeamMember>
      */
     #[ORM\OneToMany(targetEntity: TeamMember::class, mappedBy: 'team', orphanRemoval: true)]
-    #[ORM\OrderBy(['ordinal' => 'ASC'])]
+    #[ORM\OrderBy(['ordinal' => \SortDirection::Ascending])]
     private Collection $members;
 
     public function __construct()
